@@ -122,11 +122,11 @@ class IsingApp:
         current_row_left = 0 
         frame_j = ttk.LabelFrame(left_column_container, text="耦合常数 (J)", padding=(5,3)); frame_j.grid(row=current_row_left, column=0, pady=3, sticky="ew"); current_row_left += 1
         self.j_slider_label_widget = ttk.Label(frame_j, textvariable=self.j_slider_actual_label_text); self.j_slider_label_widget.pack(anchor="w", padx=3)
-        self.j_slider = tk.Scale(frame_j, from_=-2.0, to=2.0, resolution=0.1, orient="horizontal", length=200); self.j_slider.set(1.0); self.j_slider.pack(fill="x", padx=3) # 调整length
+        self.j_slider = tk.Scale(frame_j, from_=-5.0, to=5.0, resolution=0.1, orient="horizontal", length=200); self.j_slider.set(1.0); self.j_slider.pack(fill="x", padx=3) # 调整length
         
         frame_h = ttk.LabelFrame(left_column_container, text="外场强度 (H)", padding=(5,3)); frame_h.grid(row=current_row_left, column=0, pady=3, sticky="ew"); current_row_left += 1
         h_label = ttk.Label(frame_h, text="H 值:"); h_label.pack(anchor="w", padx=3)
-        self.h_slider = tk.Scale(frame_h, from_=-1.0, to=1.0, resolution=0.05, orient="horizontal", length=200); self.h_slider.set(self.H_scalar_gui); self.h_slider.pack(fill="x", padx=3) # 调整length
+        self.h_slider = tk.Scale(frame_h, from_=-2.0, to=2.0, resolution=0.05, orient="horizontal", length=200); self.h_slider.set(self.H_scalar_gui); self.h_slider.pack(fill="x", padx=3) # 调整length
         
         model_type_frame = ttk.LabelFrame(left_column_container, text="模型规则", padding=(5,3)); model_type_frame.grid(row=current_row_left, column=0, pady=3, sticky="ew"); current_row_left += 1
         self.random_j_checkbox = ttk.Checkbutton(model_type_frame, text="随机J<自旋玻璃> (J∈[-Jmax,Jmax])", variable=self.random_J_var, command=self._on_random_j_toggle); self.random_j_checkbox.pack(anchor="w")
@@ -201,7 +201,7 @@ class IsingApp:
         if is_xy:
             self.ns_slider.config(state="disabled"); self.ns_slider_label.config(text="状态数 s (XY禁用):", foreground="gray")
             if hasattr(self, 'potts_checkbox'): self.use_potts_model_var.set(False); self.potts_checkbox.config(state="disabled")
-            common_label_update("箭头颜色方案 (XY):")
+            self.colormap_combobox.config(state="disabled")
         else: 
             self.ns_slider.config(state="normal")
             if hasattr(self, 'potts_checkbox'): self.potts_checkbox.config(state="normal")
@@ -216,11 +216,9 @@ class IsingApp:
             if is_potts:
                 if hasattr(self, 'xy_checkbox'): self.xy_checkbox.config(state="disabled") 
                 self.ns_slider.config(state="normal"); self.ns_slider_label.config(text="状态数 q (Potts):", foreground="black")
-                common_label_update("热图颜色方案 (Potts):")
             else: 
                 if hasattr(self, 'xy_checkbox'): self.xy_checkbox.config(state="normal")
                 self.ns_slider.config(state="normal"); self.ns_slider_label.config(text="状态数 s (Ising):", foreground="black")
-                common_label_update("热图颜色方案:")
         self._on_random_j_toggle()
 
     def _set_controls_state(self, state_str):
@@ -393,7 +391,6 @@ class IsingApp:
                     suptitle_final = f"Ising/XY/Potts Model (L={self.L_val}) - Final State (Sim ID: {sim_id})"
                     self.root.after(0, self._update_plots_in_gui_thread, sim_id, final_plot_package, suptitle_final)
         if sim_id == self.current_simulation_id: self.root.after(0, lambda: self.pause_button.config(state="disabled"))
-        messagebox.showinfo("完成", f"常规模拟 [任务{sim_id}] 已完成")
         print(f"----- 常规模拟 [任务{sim_id}] 已完成 ^v^ -----")
 
     def _update_plots_in_gui_thread(self, sim_id_from_worker, plot_data_list, suptitle_str): 
@@ -781,7 +778,7 @@ class IsingApp:
         ns_part = f"Ns{ns_val}" if not xy else "XY"
         h_part = f"H{h_val:.2f}"
         date_str = datetime.datetime.now().strftime("%Y%m%d")
-        base_filename = f"batch_data_{model_type_part}_{j_str_part}_{ns_part}_{h_part}_{date_str}"
+        base_filename = f"batch_data_T{self.batch_temperatures_scanned[-1]:.2f}-{self.batch_temperatures_scanned[0]:.2f}_{model_type_part}_{j_str_part}_{ns_part}_{h_part}_{date_str}"
         safe_filename = "".join(c if c.isalnum() or c in ('-', '_', '.') else '_' for c in base_filename) + ".csv"
         filepath = os.path.join(data_dir, safe_filename)
 
