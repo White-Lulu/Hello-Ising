@@ -173,8 +173,8 @@ class IsingApp:
         ttk.Label(sweeps_batch_f, text="每温度点Sweeps数:").pack(side="left")
         self.sweeps_per_temp_batch_entry = ttk.Entry(sweeps_batch_f, textvariable=self.batch_sweeps_per_temp_var, width=7); self.sweeps_per_temp_batch_entry.pack(side="left", padx=2)
         save_options_f = ttk.Frame(batch_frame); save_options_f.pack(fill="x", pady=2)
-        self.save_snapshots_batch_checkbox = ttk.Checkbutton(batch_frame, text="保存快照", variable=self.batch_save_snapshots_var); self.save_snapshots_batch_checkbox.pack(anchor="w", pady=2) # 简化文本
-        self.save_data_batch_checkbox = ttk.Checkbutton(save_options_f, text="保存数据(T,M,E)", variable=self.batch_save_data_var); self.save_data_batch_checkbox.pack(side="left", anchor="w") # 新增
+        self.save_snapshots_batch_checkbox = ttk.Checkbutton(save_options_f, text="保存快照", variable=self.batch_save_snapshots_var); self.save_snapshots_batch_checkbox.pack(side="left", anchor="w", padx=(0,10))
+        self.save_data_batch_checkbox = ttk.Checkbutton(save_options_f, text="保存数据(T,M,E)", variable=self.batch_save_data_var); self.save_data_batch_checkbox.pack(side="left", anchor="w")
         self.start_batch_button = ttk.Button(batch_frame, text="开始批量实验", command=self._start_batch_experiment_action); self.start_batch_button.pack(fill="x", pady=5)
 
         global_sim_control_frame = ttk.LabelFrame(right_column_container, text="全局控制", padding=(5,5)); global_sim_control_frame.grid(row=current_row_right, column=0, pady=5, sticky="ew"); current_row_right += 1
@@ -359,7 +359,7 @@ class IsingApp:
                     })
             
             if plot_update_needed and current_plot_package:
-                suptitle = f"{model.model_type_str} Model T={model.T:.3f} - Sweeps: {current_sweep_num}"
+                suptitle = f"{model.model_type_str} Model - Sweeps: {current_sweep_num}"
                 self.root.after(0, self._update_plots_in_gui_thread, sim_id, current_plot_package, suptitle)
 
             if current_sweep_num % 50 == 0: print(f"Sweep {current_sweep_num}/{self.total_sweeps_to_show} √")
@@ -410,8 +410,8 @@ class IsingApp:
             if 'lattice' in axes_config:
                 ax_lattice = axes_config['lattice']
                 ax_lattice.clear() 
-                
-                model_params_title = f"{data_item['model_J_display_str']}"
+
+                model_params_title = f"T={data_item['model_T']}, {data_item['model_J_display_str']}"
                 ns_display_val = data_item['model_Ns_display']
                 model_params_title += f", Ns={ns_display_val}"
                 model_params_title += f" H={self.H_scalar if self.H_scalar is not None else 0.0}"

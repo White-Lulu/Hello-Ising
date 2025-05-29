@@ -196,8 +196,8 @@ class IsingModel2D:
     # 在给定的Matplotlib Axes对象显示当前晶格状态
     def display_on_ax(self, ax, title_info_dynamic="", cmap_name='viridis'):
         ax.clear() # 清除之前的绘图内容
-        
-        model_params_title = f"{self.J_display_str}" 
+
+        model_params_title = f"T={self.T},{self.J_display_str}" 
         model_params_title += f" H={self.H_scalar if self.H_scalar is not None else 0.0}"
         if not self.use_xy_model: 
              model_params_title += f" Ns={self.num_states}"
