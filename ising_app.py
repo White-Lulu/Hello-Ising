@@ -28,10 +28,10 @@ class IsingApp:
         ## --- [可更改的默认值] ---
 
         # 常规模拟参数 
-        self.L_val = 30; # 格点数目
+        self.L_val = 70; # 格点数目
         self.H_scalar = 0.0 # 外场强度
         self.H_scalar_gui=self.H_scalar
-        self.total_sweeps_to_show = 500 # 总sweeps
+        self.total_sweeps_to_show = 100 # 总sweeps
         self.sweeps_per_frame = 2 # 每隔多少sweeps更新一次图像
         self.data_log_interval = 5 # 每隔多少sweeps记录一次M/E数据
 

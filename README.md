@@ -1,4 +1,4 @@
-# 二维伊辛模型及其变体模拟器
+# Hello Ising 2D
 
 <img src="./sources/gui1.png" alt="gui1" width="900" height="300" />
 
