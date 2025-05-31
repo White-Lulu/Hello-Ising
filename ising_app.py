@@ -31,7 +31,7 @@ class IsingApp:
         self.L_val = 70; # 格点数目
         self.H_scalar = 0.0 # 外场强度
         self.H_scalar_gui=self.H_scalar
-        self.total_sweeps_to_show = 100 # 总sweeps
+        self.total_sweeps_to_show = 1000 # 总sweeps
         self.sweeps_per_frame = 2 # 每隔多少sweeps更新一次图像
         self.data_log_interval = 5 # 每隔多少sweeps记录一次M/E数据
 
@@ -585,7 +585,7 @@ class IsingApp:
             self.batch_E_vs_T_ax = None
 
         self.canvas.draw_idle()
-        print(f"----- 批量模拟 任务：{local_sim_id}, 温度: {temp_points[-1]} ~ {temp_points[0]} 已启动 -----")
+        print(f"----- 批量模拟 [任务 {local_sim_id}] 温度: {temp_points[-1]} ~ {temp_points[0]} 已启动 -----")
 
         self.simulation_thread = threading.Thread(
             target=self._batch_simulation_loop_worker,
